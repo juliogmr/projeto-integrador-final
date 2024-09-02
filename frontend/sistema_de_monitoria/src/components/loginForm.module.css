@@ -1,0 +1,37 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+    border: 1px solid black;
+
+    width: 80%;
+    padding: 20px;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.inputBox {
+    border-radius: 8px;
+    padding-left: 10px;
+    height: 1.5rem;
+}
+
+.errorLabel {
+    font-size: 0.8rem;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.formButton {
+    background-color: var(--primary-light-color);
+    border-radius: 8px;
+}
+
+.formButton:hover {
+    background-color: var(--primary-dark-color);
+}

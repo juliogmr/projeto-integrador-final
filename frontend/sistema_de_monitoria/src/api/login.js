@@ -7,11 +7,6 @@ export async function fazerLogin(tipoUsuario, email, senha) {
 
     const url = endpoints[tipoUsuario];
 
-    console.log(`TipoUsuario: ${tipoUsuario}`);
-    console.log(`Email: ${email}`);
-    console.log(`Password: ${senha}`);
-    console.log(`URL: ${url}`);
-
     try {
         const resp = await fetch(url, {
             method: "POST",
@@ -21,10 +16,14 @@ export async function fazerLogin(tipoUsuario, email, senha) {
             body: JSON.stringify({ email, senha}),
         });
 
-        const data = await resp.json();
+        let data = await resp.json();
 
-        console.log(data)
-        return data;
+        if (!resp.ok) {
+            throw data.message;
+        }
+
+        const user = { ...data, tipoUsuario: tipoUsuario };
+        return user;
     } catch(err) {
         console.log(err);
         return null;

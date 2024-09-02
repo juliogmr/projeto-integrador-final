@@ -31,10 +31,10 @@ export default function LoginForm({ tipoUsuario }) {
         return;
     }
     
-    const userID = await fazerLogin(tipoUsuario, email, password);
+    const user = await fazerLogin(tipoUsuario, email, password);
 
-    if (userID) {
-        setUser({ userID: userID, tipoUsuario: tipoUsuario });
+    if (user) {
+        setUser(user);
         navigate("/dashboard");
     }
     else {
@@ -69,7 +69,7 @@ export default function LoginForm({ tipoUsuario }) {
             />
         </div>
         <label className={styles.errorLabel}>{formError}</label>
-        <button type="button" className={styles.formButton} onClick={onButtonClick}>Login</button>
+        <button type="submit" className={styles.formButton} onClick={onButtonClick}>Login</button>
       </div>
   );
 }
