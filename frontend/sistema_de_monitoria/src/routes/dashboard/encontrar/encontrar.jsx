@@ -2,8 +2,9 @@ import { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./encontrar.module.css";
 import { UserContext } from "../../../contexts/userContext";
-import TituloSecao from "../../../components/tituloSecao";
-import UserResult from "../../../components/userResult";
+import TituloSecao from "../../../components/tituloSecao/tituloSecao";
+import UserResult from "../../../components/userResult/userResult";
+import { buscarUsuarios } from "../../../api/api";
 
 
 export default function Encontrar() {
@@ -27,26 +28,7 @@ export default function Encontrar() {
     }, [location]);
 
     const buscar = async (target, nome, disciplina) => {
-        const endpoints = {
-            "monitores": "http://localhost:8080/monitores",
-            "alunos": "http://localhost:8080/alunos",
-        };
-
-        let url = endpoints[target] + "?nome=" + nome + "&disciplina=" + disciplina;
-
-
-        try {
-            const resp = await fetch(url);
-            const resultados = await resp.json();
-
-            setResultados(resultados);
-            console.log(resultados)
-
-        } catch(err) {
-            console.log("Erro: " + err);
-            setResultados([]);
-        }
-
+        setResultados(await buscarUsuarios(target, nome, disciplina));
     }
 
     return (
@@ -81,7 +63,7 @@ export default function Encontrar() {
             <div className={styles.secao}>
             <TituloSecao text="Resultados" />
             {resultados.length > 0 && resultados.map((user) => (
-                <UserResult user={user}/>
+                <UserResult user={user} key={user.id}/>
             ))}
             </div>
         </div>

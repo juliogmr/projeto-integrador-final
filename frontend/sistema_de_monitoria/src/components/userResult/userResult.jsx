@@ -1,9 +1,9 @@
-import styles from "./userResult.module.css";
-import avatar from "../assets/avatar.png";
-import star_empty from "../assets/star_empty.png";
-import star_full from "../assets/star_full.png";
 import { useEffect } from "react";
+import avatar from "../../assets/avatar.png";
+import star_empty from "../../assets/star_empty.png";
+import star_full from "../../assets/star_full.png";
 
+import styles from "./userResult.module.css";
 
 export default function UserResult({ user }) {
 

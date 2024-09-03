@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import LoginForm from '../components/loginForm';
+import LoginForm from '../components/loginForm/loginForm';
 import styles from './root.module.css'
 import { useState } from 'react';
 

@@ -1,0 +1,16 @@
+.container {
+    width: 85%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.secao {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    margin-bottom: 10px;
+}

@@ -1,8 +1,9 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { fazerLogin } from "../../api/api";
+import { UserContext } from "../../contexts/userContext";
+
 import styles from "./loginForm.module.css";
-import { fazerLogin } from "../api/login";
-import { UserContext } from "../contexts/userContext";
 
 export default function LoginForm({ tipoUsuario }) {
   const { setUser } = useContext(UserContext);

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import styles from "./homePage.module.css";
-import LoginForm from "../../components/loginForm";
 import { useLocation } from "react-router-dom";
-import DividingLine from "../../components/dividingLine";
+import LoginForm from "../../components/loginForm/loginForm";
+import DividingLine from "../../components/dividingLine/dividingLine";
+
+import styles from "./homePage.module.css";
 
 export default function HomePage() {
     const location = useLocation();

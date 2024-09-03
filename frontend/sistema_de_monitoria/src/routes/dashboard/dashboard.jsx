@@ -2,8 +2,8 @@ import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
 import styles from "./dashboard.module.css";
-import NavButton from "../../components/navButton";
-import DividingLine from "../../components/dividingLine";
+import NavButton from "../../components/navButton/navButton";
+import DividingLine from "../../components/dividingLine/dividingLine";
 
 
 export default function Dashboard() {
