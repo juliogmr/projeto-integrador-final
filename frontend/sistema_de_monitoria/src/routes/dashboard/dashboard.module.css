@@ -28,8 +28,8 @@ ul {
 }
 
 #logoutButton {
-    margin-bottom: 20px;
     margin-top: auto;
+    margin-bottom: 25px;
 
     background-color: var(--primary-light-color);
     border-radius: 15px;
@@ -40,5 +40,6 @@ ul {
 
 .mainContent {
     width: 100%;
-    background-color: red;
+    
+    overflow-y: scroll;
 }

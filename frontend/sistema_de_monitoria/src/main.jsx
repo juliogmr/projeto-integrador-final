@@ -33,11 +33,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/dashboard/encontrar/alunos",
-                        element: <Encontrar />
+                        element: <Encontrar targetString="alunos"/>
                     },
                     {
                         path: "/dashboard/encontrar/monitores",
-                        element: <Encontrar />
+                        element: <Encontrar targetString="monitores"/>
                     },
                     {
                         path: "/dashboard/monitorias",
