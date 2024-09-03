@@ -25,7 +25,7 @@ export async function fazerLogin(tipoUsuario, email, senha) {
         const user = { ...data, tipoUsuario: tipoUsuario };
         return user;
     } catch(err) {
-        console.log(err);
+        console.log("Erro: " + err);
         return null;
     }
 }
@@ -62,15 +62,25 @@ export async function buscarMonitorias(user) {
                 ...resultado,
                 data: new Date(resultado.data),
             }
-        })
+        });
 
         monitorias.sort((a, b) => {
             return a.data - b.data;
-        })
+        });
 
         return monitorias;
     } catch (err) {
         console.log("Erro: " + err);
         return [];
     }
+}
+
+export function monitoriaVencida(monitoria) {
+    return monitoria.data < Date.now();
+}
+
+export function filtrarMonitoriasVencidas(monitorias) {
+    return monitorias.filter((monitoria) => {
+            return !monitoriaVencida(monitoria);
+        });
 }

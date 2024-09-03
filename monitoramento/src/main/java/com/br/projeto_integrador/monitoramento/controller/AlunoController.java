@@ -17,14 +17,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import javax.swing.text.html.Option;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/alunos")
 @RequiredArgsConstructor
@@ -41,8 +45,22 @@ public class AlunoController {
 
     // Método para listar todos os alunos
     @GetMapping
-    public List<AlunoDTOResponse> getAllAlunos() {
-        List<Aluno> alunos = alunoRepository.findAll();
+    public List<AlunoDTOResponse> getAllAlunos(@RequestParam(required = false) String nome, @RequestParam(required = false) String disciplina) {
+    	Specification<Aluno> spec = (root, query, cb) -> {
+    		List<Predicate> predicates = new ArrayList<>();
+    		
+    		if (nome != null) {
+    			predicates.add(cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
+    		}
+    		if (disciplina != null) {
+    			Join<Aluno, Disciplina> disciplinaJoin = root.join("disciplinas");
+    			predicates.add(cb.like(cb.lower(disciplinaJoin.get("nome")), "%" + disciplina.toLowerCase() + "%"));
+    		}
+    		
+    		return cb.and(predicates.toArray(new Predicate[0]));
+    	};
+    	
+    	List<Aluno> alunos = alunoRepository.findAll(spec);
         List<AlunoDTOResponse> list = new ArrayList<>();
         for (Aluno aluno: alunos) {
             AlunoDTOResponse alunoDTOResponse = getAlunoDTOResponse(aluno);
@@ -129,6 +147,7 @@ public class AlunoController {
 
     private static AlunoDTOResponse getAlunoDTOResponse(Aluno aluno) {
         AlunoDTOResponse alunoDTOResponse = new AlunoDTOResponse();
+        alunoDTOResponse.setId(aluno.getId());
         alunoDTOResponse.setNome(aluno.getNome());
         alunoDTOResponse.setEmail(aluno.getEmail());
         List<DisciplinaDTOResponseAluno> listaDisciplinas = new ArrayList<>();
@@ -226,13 +245,15 @@ public class AlunoController {
     }
 
     // Método para "logar"
-    @GetMapping("/logar")
-    public ResponseEntity<Long> logar(@RequestBody LoginDTO loginDTO) {
+    @PostMapping("/logar")
+    public ResponseEntity<AlunoDTOResponse> logar(@RequestBody LoginDTO loginDTO) {
         var aluno = alunoRepository.findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
-        if(aluno == null){
-            throw new ResourceNotFoundException("Usuário não cadastrado no cinema");
-        } else {
-            return new ResponseEntity<>(aluno.get().getId(), HttpStatus.OK);
+        if(!aluno.isPresent()){
+        	throw new ResourceNotFoundException("Usuário ou senha incorretos");
         }
+
+        AlunoDTOResponse alunoResponse = getAlunoDTOResponse(aluno.get());
+        
+        return new ResponseEntity<>(alunoResponse, HttpStatus.OK);
     }
 }

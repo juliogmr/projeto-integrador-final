@@ -3,11 +3,11 @@ import styles from "./monitorias.module.css";
 import { UserContext } from "../../../contexts/userContext";
 import TituloSecao from "../../../components/tituloSecao/tituloSecao";
 import { useLocation } from "react-router-dom";
-import { buscarMonitorias } from "../../../api/api";
+import { buscarMonitorias, filtrarMonitoriasVencidas } from "../../../api/api";
 import MonitoriaResult from "../../../components/monitoriaResult/monitoriaResult";
 
 
-export default function Monitorias({ title = null, limite = null, embedded = false}) {
+export default function Monitorias({ title = null, limite = null, embedded = false, somenteNovas = false}) {
     const location = useLocation();
     const { user } = useContext(UserContext);
     const [ monitorias, setMonitorias ] = useState([]);
@@ -26,7 +26,11 @@ export default function Monitorias({ title = null, limite = null, embedded = fal
 
     useEffect(() => {
         async function fetchData() {
-            const result = await buscarMonitorias(user);
+            let result = await buscarMonitorias(user);
+
+            if(somenteNovas) {
+                result = filtrarMonitoriasVencidas(result);
+            }
 
             if(!limite) {
                 limite = result.length;

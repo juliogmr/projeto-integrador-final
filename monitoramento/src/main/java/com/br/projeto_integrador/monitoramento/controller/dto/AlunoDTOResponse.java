@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class AlunoDTOResponse {
 
+	private Long id;
     private String nome;
     private String email;
     private List<DisciplinaDTOResponseAluno> disciplinas;

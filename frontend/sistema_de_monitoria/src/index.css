@@ -16,6 +16,14 @@
   --primary-light-color: #C0C3DE;
 }
 
+#root {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    background-color: black;
+}
+
 a {
   font-weight: 500;
   color: #646cff;

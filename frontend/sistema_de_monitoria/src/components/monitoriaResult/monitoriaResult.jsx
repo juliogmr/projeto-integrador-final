@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import styles from "./monitoriaResult.module.css";
 import { UserContext } from "../../contexts/userContext";
+import { monitoriaVencida } from "../../api/api";
 
 
 export default function MonitoriaResult({ monitoria }) {
@@ -14,10 +15,10 @@ export default function MonitoriaResult({ monitoria }) {
         parceiro = monitoria.monitor;
     }
 
-    console.log(monitoria);
+    const vencida = monitoriaVencida(monitoria);
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${vencida ? styles.vencida : ""}`}>
             <div className={styles.col}>
                 <h4 className={styles.colTitulo}>{monitoria.data.toLocaleString()}</h4>
                 <p><span className={styles.bold}>{tipoParceiro}:</span> {parceiro}</p>

@@ -6,7 +6,12 @@ import com.br.projeto_integrador.monitoramento.controller.dto.monitores.Discipli
 import com.br.projeto_integrador.monitoramento.domain.*;
 import com.br.projeto_integrador.monitoramento.repository.*;
 import com.br.projeto_integrador.monitoramento.util.ResourceNotFoundException;
+
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/monitores")
 @RequiredArgsConstructor
@@ -29,9 +35,28 @@ public class MonitorController {
     private final AlunoRepository alunoRepository;
 
     @GetMapping
-    public ResponseEntity<List<Monitor>> getAllMonitores() {
-        List<Monitor> monitores = monitorRepository.findAll();
-        return new ResponseEntity<>(monitores, HttpStatus.OK);
+    public List<MonitorDTOResponse> getAllMonitores(@RequestParam(required = false) String nome, @RequestParam(required = false) String disciplina) {
+    	Specification<Monitor> spec = (root, query, cb) -> {
+    		List<Predicate> predicates = new ArrayList<>();
+    		
+    		if (nome != null) {
+    			predicates.add(cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
+    		}
+    		if (disciplina != null) {
+    			Join<Monitor, Disciplina> disciplinaJoin = root.join("disciplinas");
+    			predicates.add(cb.like(cb.lower(disciplinaJoin.get("nome")), "%" + disciplina.toLowerCase() + "%"));
+    		}
+    		
+    		return cb.and(predicates.toArray(new Predicate[0]));
+    	};
+    	
+    	List<Monitor> monitores = monitorRepository.findAll(spec);
+        List<MonitorDTOResponse> list = new ArrayList<>();
+        for (Monitor monitor : monitores) {
+            MonitorDTOResponse monitorDTOResponse = MonitorDTOResponse.fromMonitor(monitor);
+            list.add(monitorDTOResponse);
+        }
+        return list;
     }
 
 
@@ -43,10 +68,15 @@ public class MonitorController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Monitor> getMonitorById(@PathVariable Long id) {
+    public ResponseEntity<MonitorDTOResponse> getMonitorById(@PathVariable Long id) {
         Monitor monitor = monitorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Monitor não encontrado com o ID: " + id));
-        return new ResponseEntity<>(monitor, HttpStatus.OK);
+        
+        MonitorDTOResponse monitorResponse = MonitorDTOResponse.fromMonitor(monitor);
+        
+        return new ResponseEntity<>(monitorResponse, HttpStatus.OK);
+        
+        
     }
 
 
@@ -170,15 +200,16 @@ public class MonitorController {
 
     // nossos endpoits do figma estao abaixo <--------->
     // Método para "logar"
-    @GetMapping("/logar")
-    public ResponseEntity<Long> logar(@RequestBody LoginDTO loginDTO) {
+    @PostMapping("/logar")
+    public ResponseEntity<MonitorDTOResponse> logar(@RequestBody LoginDTO loginDTO) {
         var monitor = monitorRepository.findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
-        if(monitor == null){
-            throw new ResourceNotFoundException("Usuário não cadastrado no cinema");
-        } else {
-            Long id = monitor.get().getId();
-            return new ResponseEntity<>(id, HttpStatus.OK);
+        if(!monitor.isPresent()){
+        	throw new ResourceNotFoundException("Usuário ou senha incorretos");
         }
+        
+        MonitorDTOResponse monitorResponse = MonitorDTOResponse.fromMonitor(monitor.get());
+
+        return new ResponseEntity<>(monitorResponse, HttpStatus.OK);
     }
 
     //encontrar alunos por nome
