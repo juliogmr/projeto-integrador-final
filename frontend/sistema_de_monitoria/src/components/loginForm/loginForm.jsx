@@ -14,7 +14,8 @@ export default function LoginForm({ tipoUsuario }) {
 
   const navigate = useNavigate();
 
-  const onButtonClick = async () => {
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
     setFormError("");
 
     if(email === "") {
@@ -44,7 +45,7 @@ export default function LoginForm({ tipoUsuario }) {
   }
 
   return (
-      <div className={styles.formContainer}>
+      <form className={styles.formContainer} onSubmit={handleSubmit}>
         <div className={styles.inputContainer}>
             <label htmlFor="email">Email:</label>
             <input 
@@ -70,7 +71,7 @@ export default function LoginForm({ tipoUsuario }) {
             />
         </div>
         <label className={styles.errorLabel}>{formError}</label>
-        <button type="submit" className={styles.formButton} onClick={onButtonClick}>Login</button>
-      </div>
+        <button type="submit" className={styles.formButton}>Login</button>
+      </form>
   );
 }

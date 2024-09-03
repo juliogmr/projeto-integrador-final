@@ -30,12 +30,17 @@ export default function Encontrar() {
     const buscar = async (target, nome, disciplina) => {
         setResultados(await buscarUsuarios(target, nome, disciplina));
     }
+    
+    const handleSubmit = (ev) => {
+        ev.preventDefault();
+        buscar(target, nome, disciplina);
+    }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container} onSubmit={handleSubmit}>
             <div className={styles.secao}>
             <TituloSecao text={`Encontrar ${target[0].toUpperCase()}${target.slice(1)}`} />
-            <div className={styles.formContainer}>
+            <form className={styles.formContainer}>
                 <div className={styles.inputContainer}>
                     <label>Nome:</label>
                     <input 
@@ -56,9 +61,9 @@ export default function Encontrar() {
                 </div>
                 <button 
                     className={styles.formButton}
-                    onClick={() => { buscar(target, nome, disciplina)}}
+                    type="submit"
                 >Buscar</button>
-            </div>
+            </form>
             </div>
             <div className={styles.secao}>
             <TituloSecao text="Resultados" />
