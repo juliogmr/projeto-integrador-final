@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import styles from "./homePage.module.css";
-import LoginForm from "./loginForm";
+import LoginForm from "../../components/loginForm";
 import { useLocation } from "react-router-dom";
-import DividingLine from "./dividingLine";
+import DividingLine from "../../components/dividingLine";
 
 export default function HomePage() {
     const location = useLocation();
     const [selectedTab, setSelectedTab] = useState("alunos");
 
     useEffect(() => {
-        if (location.state.selected) {
+        if (location.state && location.state.selected) {
             setSelectedTab(location.state.selected);
         }
     }, [location]);

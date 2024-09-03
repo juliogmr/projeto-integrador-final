@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
-import { UserContext } from "../contexts/userContext";
+import { UserContext } from "../../contexts/userContext";
 import styles from "./dashboard.module.css";
-import NavButton from "./navButton";
-import DividingLine from "./dividingLine";
+import NavButton from "../../components/navButton";
+import DividingLine from "../../components/dividingLine";
 
 
 export default function Dashboard() {
@@ -15,10 +15,10 @@ export default function Dashboard() {
             text: "Dashboard", dest: "/dashboard", tipos: ["alunos", "monitores", "instituicoes"],
         },
         {
-            text: "Encontrar Alunos", dest: "/dashboard/encontrar", tipos: ["monitores", "instituicoes"],
+            text: "Encontrar Alunos", dest: "/dashboard/encontrar/alunos", tipos: ["monitores", "instituicoes"],
         },
         {
-            text: "Encontrar Monitores", dest: "/dashboard/encontrar", tipos: ["alunos", "instituicoes"],
+            text: "Encontrar Monitores", dest: "/dashboard/encontrar/monitores", tipos: ["alunos", "instituicoes"],
         },
         {
             text: "Monitorias Agendadas", dest: "/dashboard/monitorias", tipos: ["alunos"],
@@ -44,6 +44,7 @@ export default function Dashboard() {
 
     return (
         <div className={styles.container}>
+            {user && <>
             <nav className={styles.navbar}>
                 <h2>Dashboard {`
                 ${user.tipoUsuario === "alunos" ? "do Aluno"
@@ -51,7 +52,6 @@ export default function Dashboard() {
                     : user.tipoUsuario === "instituicoes" ? "da Instituição"
                     : ""}
                 `}</h2>
-                {user && <>
                 <h3>{user.nome}</h3>
                 <ul>
                     {buttons.filter((button) => button.tipos.includes(user.tipoUsuario)).map((button) => (
@@ -61,11 +61,11 @@ export default function Dashboard() {
                     ))}
                 </ul>
                 <button type="button" onClick={logout} id={styles.logoutButton}>Sair</button>
-                </>}
             </nav>
             <main className={styles.mainContent}>
-                    <Outlet />
+                <Outlet />
             </main>
+            </>}
         </div>
     )
 }

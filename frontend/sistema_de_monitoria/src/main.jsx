@@ -6,9 +6,13 @@ import {
 } from 'react-router-dom'
 import Root from './routes/root'
 import './index.css'
-import Dashboard from './components/dashboard'
+import Dashboard from './routes/dashboard/dashboard'
 import { UserProvider } from './contexts/userContext'
-import HomePage from './components/homePage'
+import HomePage from './routes/homepage/homePage'
+import Summary from './routes/dashboard/summary/summary'
+import Encontrar from './routes/dashboard/encontrar/encontrar'
+import Monitorias from './routes/dashboard/monitorias/monitorias'
+import Mensagens from './routes/dashboard/mensagens/mensagens'
 
 const router = createBrowserRouter([
     {
@@ -21,7 +25,29 @@ const router = createBrowserRouter([
             },
             {
                 path: "/dashboard",
-                element: <Dashboard />
+                element: <Dashboard />,
+                children: [
+                    {
+                        path: "/dashboard",
+                        element: <Summary />
+                    },
+                    {
+                        path: "/dashboard/encontrar/alunos",
+                        element: <Encontrar />
+                    },
+                    {
+                        path: "/dashboard/encontrar/monitores",
+                        element: <Encontrar />
+                    },
+                    {
+                        path: "/dashboard/monitorias",
+                        element: <Monitorias />
+                    },
+                    {
+                        path: "/dashboard/mensagens",
+                        element: <Mensagens />
+                    }
+                ]
             }
         ]
     },
