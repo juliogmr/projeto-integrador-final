@@ -51,7 +51,7 @@ export async function buscarUsuarios(target, nome, disciplina) {
 }
 
 export async function buscarMonitorias(user) {
-    const url = `http://localhost:8080/${user.tipoUsuario}/minhasMonitorias/${user.id}`;
+    const url = `http://localhost:8080/${user.tipoUsuario}/${user.id}/monitorias`;
 
     try {
         const resp = await fetch(url);
@@ -83,4 +83,85 @@ export function filtrarMonitoriasVencidas(monitorias) {
     return monitorias.filter((monitoria) => {
             return !monitoriaVencida(monitoria);
         });
+}
+
+export async function buscarMensagens(user) {
+    const url = `http://localhost:8080/${user.tipoUsuario}/${user.id}/mensagens`;
+
+    try {
+        const resp = await fetch(url);
+        const resultados = await resp.json();
+
+        let mensagens = resultados.map((resultado) => {
+            return {
+                ...resultado,
+                data: new Date(resultado.data),
+            }
+        });
+
+        mensagens.sort((a, b) => {
+            return a.data - b.data;
+        });
+
+        if(user.tipoUsuario === "alunos") {
+            mensagens = mensagens.filter((mensagem) => mensagem.tipo !== "Solicitação de Monitoria");
+        }
+
+        if(user.tipoUsuario === "monitores") {
+            mensagens = mensagens.filter((mensagem) => mensagem.tipo !== "Monitoria Aceita" && mensagem.tipo !== "Monitoria Recusada");
+        }
+
+        return mensagens;
+    } catch (err) {
+        console.log("Erro: " + err);
+        return [];
+    }
+}
+
+export async function deletarMensagem(mensagem) {
+    const url = `http://localhost:8080/mensagens/${mensagem.id}`;
+
+    try {
+        const resp = await fetch(url, {
+            method: "DELETE",
+            body: {
+                respondida: true,
+            },
+        });
+
+        return resp.ok;
+    } catch(err) {
+        console.log("Erro: " + err);
+        return false;
+    }
+}
+
+export async function aceitarMonitoria(monitoria) {
+    const url = `http://localhost:8080/monitorias/${monitoria.id}/aceitar`;
+
+    try {
+        const resp = await fetch(url, {
+            method: "PUT"
+        });
+        
+        return resp.ok;
+    } catch(err) {
+        console.log("Erro: " + err);
+        return false;
+    }
+}
+
+export async function recusarMonitoria(monitoria) {
+    const url = `http://localhost:8080/monitorias/${monitoria.id}/recusar`;
+
+    try {
+        const resp = await fetch(url, {
+            method: "PUT"
+        });
+        
+        return resp.ok;
+    } catch(err) {
+        console.log("Erro: " + err);
+        return false;
+    }
 }

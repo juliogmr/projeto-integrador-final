@@ -8,18 +8,6 @@
     padding: 5px 20px;
 }
 
-.vencida {
-    opacity: 0.60;
-}
-
-.pendente {
-    background-color: #ddcea1;
-}
-
-.cancelada {
-    background-color: #eaa9a9;
-}
-
 .col {
     display: flex;
     flex-direction: column;
