@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { fazerLogin } from "../../api/api";
-import { UserContext } from "../../contexts/userContext";
 
 import styles from "./loginForm.module.css";
+import { saveUserSession } from "../../api/utils";
+import { UserContext } from "../../contexts/userContext";
 
 export default function LoginForm({ tipoUsuario }) {
   const { setUser } = useContext(UserContext);
@@ -36,6 +37,8 @@ export default function LoginForm({ tipoUsuario }) {
     const user = await fazerLogin(tipoUsuario, email, password);
 
     if (user) {
+        // setUser(user);
+        saveUserSession(user);
         setUser(user);
         navigate("/dashboard");
     }

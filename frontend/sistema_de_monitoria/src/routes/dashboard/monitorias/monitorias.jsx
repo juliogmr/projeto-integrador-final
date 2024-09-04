@@ -3,13 +3,14 @@ import styles from "./monitorias.module.css";
 import { UserContext } from "../../../contexts/userContext";
 import TituloSecao from "../../../components/tituloSecao/tituloSecao";
 import { useLocation } from "react-router-dom";
-import { buscarMonitorias, filtrarMonitoriasVencidas } from "../../../api/api";
+import { buscarMonitorias, filtrarMonitoriasCanceladas, filtrarMonitoriasVencidas } from "../../../api/api";
 import MonitoriaResult from "../../../components/monitoriaResult/monitoriaResult";
 
 
 export default function Monitorias({ title = null, limite = null, embedded = false, somenteNovas = false}) {
     const location = useLocation();
     const { user } = useContext(UserContext);
+
     const [ monitorias, setMonitorias ] = useState([]);
     
     let titulo = "";
@@ -30,6 +31,7 @@ export default function Monitorias({ title = null, limite = null, embedded = fal
 
             if(somenteNovas) {
                 result = filtrarMonitoriasVencidas(result);
+                result = filtrarMonitoriasCanceladas(result);
             }
 
             if(!limite) {

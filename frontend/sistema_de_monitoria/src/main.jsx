@@ -13,6 +13,7 @@ import Summary from './routes/dashboard/summary/summary'
 import Encontrar from './routes/dashboard/encontrar/encontrar'
 import Monitorias from './routes/dashboard/monitorias/monitorias'
 import Mensagens from './routes/dashboard/mensagens/mensagens'
+import Solicitar from './routes/dashboard/solicitar/solicitar'
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
                     {
                         path: "/dashboard/mensagens",
                         element: <Mensagens />
+                    },
+                    {
+                        path: "/dashboard/solicitar",
+                        element: <Solicitar />
                     }
                 ]
             }

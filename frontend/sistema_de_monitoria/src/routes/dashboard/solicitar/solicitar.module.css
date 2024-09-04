@@ -1,0 +1,71 @@
+.container {
+    width: 85%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.secao {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    
+    margin-bottom: 10px;
+}
+
+.formContainer {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: center;
+    gap: 15px;
+    background-color: var(--primary-light-color);
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 10px 20px;
+    width: 50%;
+    align-self: center;
+}
+
+.inputContainer {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 10px;
+    font-weight: bold;
+
+    align-items: center;
+}
+
+.inputBox {
+    border-radius: 10px;
+    border: 1px solid black;
+    height: 2rem;
+}
+
+.formButton {
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: var(--primary-dark-color);
+    align-self: center;
+}
+
+.disciplinaSelect {
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: white;
+    height: 2rem;
+}
+
+.seletorData {
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: white;
+    width: 100%;
+}
+
+.erro {
+    color: red;
+    align-self: center;
+    text-align: center;
+}

@@ -1,31 +1,55 @@
 .container {
-    display: grid;
-    grid-template-columns: 40% 40% 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 
     background-color: var(--primary-light-color);
     border-radius: 20px;
     border: 1px solid black;
-    padding: 5px 20px;
+    padding: 5px 15px;
 }
 
-.col {
+.rowTipo {
+    grid-row: 1;
+}
+
+.titulo {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.containerBotoes {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
+    justify-content: flex-end;
     gap: 10px;
 }
 
-.colTitulo {
+.respostaBotao {
+    grid-column: 3;
+
+    background-color: var(--primary-light-color);
+    border-radius: 15px;
+    border: 1px solid black; 
     font-weight: bold;
-    font-size: 1.15rem;
-    margin: 0;
+    font-size: 0.8rem;
+
+    width: 70%;
+    max-width: 200px;
 }
 
-.col p {
-    margin: 0;
+.aceitar:hover {
+    background-color: var(--aceitar-color);
 }
 
-.bold {
-    font-weight: bold;
+.recusar:hover {
+    background-color: var(--recusar-color);
+}
+
+.erro {
+    color: red;
+}
+
+.sucesso {
+    color: green;
 }

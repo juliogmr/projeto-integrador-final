@@ -14,6 +14,10 @@
 
   --primary-dark-color: #777DA7;
   --primary-light-color: #C0C3DE;
+  --pendente-color: #ddcea1;
+  --cancelada-color: #eaa9a9;
+  --recusar-color: #eaa9a9;
+  --aceitar-color: #7ed17e;
 }
 
 #root {

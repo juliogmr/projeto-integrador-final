@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Monitorias from "../monitorias/monitorias";
 import styles from "./summary.module.css";

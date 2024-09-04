@@ -1,14 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styles from "./encontrar.module.css";
-import { UserContext } from "../../../contexts/userContext";
 import TituloSecao from "../../../components/tituloSecao/tituloSecao";
 import UserResult from "../../../components/userResult/userResult";
 import { buscarUsuarios } from "../../../api/api";
 
 
 export default function Encontrar() {
-    const { user } = useContext(UserContext);
     const location = useLocation();
 
 
@@ -37,10 +35,10 @@ export default function Encontrar() {
     }
 
     return (
-        <div className={styles.container} onSubmit={handleSubmit}>
+        <div className={styles.container} >
             <div className={styles.secao}>
             <TituloSecao text={`Encontrar ${target[0].toUpperCase()}${target.slice(1)}`} />
-            <form className={styles.formContainer}>
+            <form className={styles.formContainer} onSubmit={handleSubmit}>
                 <div className={styles.inputContainer}>
                     <label>Nome:</label>
                     <input 
@@ -68,7 +66,7 @@ export default function Encontrar() {
             <div className={styles.secao}>
             <TituloSecao text="Resultados" />
             {resultados.length > 0 && resultados.map((user) => (
-                <UserResult user={user} key={user.id}/>
+                <UserResult displayUser={user} key={user.id}/>
             ))}
             </div>
         </div>

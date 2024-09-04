@@ -1,7 +1,8 @@
 package com.br.projeto_integrador.monitoramento.controller.dto;
 
-import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
+
+import lombok.Data;
 
 @Data
 public class LoginDTO {

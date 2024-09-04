@@ -1,24 +1,46 @@
 package com.br.projeto_integrador.monitoramento.controller;
 
-import com.br.projeto_integrador.monitoramento.controller.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.br.projeto_integrador.monitoramento.controller.dto.LoginDTO;
+import com.br.projeto_integrador.monitoramento.controller.dto.MensagemDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.MonitorDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaResponseFinalMonitor;
 import com.br.projeto_integrador.monitoramento.controller.dto.monitores.AlunoMonitoria;
 import com.br.projeto_integrador.monitoramento.controller.dto.monitores.DisciplinasAlunos;
-import com.br.projeto_integrador.monitoramento.domain.*;
-import com.br.projeto_integrador.monitoramento.repository.*;
+import com.br.projeto_integrador.monitoramento.domain.Aluno;
+import com.br.projeto_integrador.monitoramento.domain.Disciplina;
+import com.br.projeto_integrador.monitoramento.domain.Mensagem;
+import com.br.projeto_integrador.monitoramento.domain.Monitor;
+import com.br.projeto_integrador.monitoramento.domain.Monitoria;
+import com.br.projeto_integrador.monitoramento.repository.AlunoRepository;
+import com.br.projeto_integrador.monitoramento.repository.DisciplinaRepository;
+import com.br.projeto_integrador.monitoramento.repository.MensagemRepository;
+import com.br.projeto_integrador.monitoramento.repository.MonitorRepository;
+import com.br.projeto_integrador.monitoramento.repository.MonitoriaRepository;
 import com.br.projeto_integrador.monitoramento.util.ResourceNotFoundException;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
@@ -33,6 +55,8 @@ public class MonitorController {
     private final MonitoriaRepository monitoriaRepository;
 
     private final AlunoRepository alunoRepository;
+    
+    private final MensagemRepository mensagemRepository;
 
     @GetMapping
     public List<MonitorDTOResponse> getAllMonitores(@RequestParam(required = false) String nome, @RequestParam(required = false) String disciplina) {
@@ -144,10 +168,14 @@ public class MonitorController {
 
 
     @GetMapping("/{id}/monitorias")
-    public ResponseEntity<List<Monitoria>> getMonitoriasByMonitorId(@PathVariable Long id) {
+    public ResponseEntity<List<MonitoriaDTOResponse>> getMonitoriasByMonitorId(@PathVariable Long id) {
         Monitor monitor = monitorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Monitor não encontrado com o ID: " + id));
-        return new ResponseEntity<>(monitor.getMonitorias(), HttpStatus.OK);
+        
+        List<MonitoriaDTOResponse> monitoriasDTOList = monitor.getMonitorias().stream()
+        		.map((monitoria) -> MonitoriaDTOResponse.fromMonitoria(monitoria)).collect(Collectors.toList());
+        
+        return new ResponseEntity<>(monitoriasDTOList, HttpStatus.OK);
     }
 
 
@@ -286,5 +314,16 @@ public class MonitorController {
             }
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+    
+    @GetMapping("/{id}/mensagens")
+    public ResponseEntity<List<MensagemDTOResponse>> getMensagens(@PathVariable Long id) {
+    	List<Mensagem> mensagens = mensagemRepository.findAllByMonitorId(id);
+    	
+    	List<MensagemDTOResponse> mensagensDTOList = mensagens.stream()
+    			.map((mensagem) -> MensagemDTOResponse.fromMensagem(mensagem))
+    			.collect(Collectors.toList());
+    	
+    	return new ResponseEntity<>(mensagensDTOList, HttpStatus.OK);
     }
 }

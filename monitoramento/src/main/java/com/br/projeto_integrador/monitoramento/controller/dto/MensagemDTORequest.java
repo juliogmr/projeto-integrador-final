@@ -5,12 +5,12 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class MonitoriaResponseFinalMonitor {
+public class MensagemDTORequest {
 
     private LocalDateTime data;
-    private String local;
-
-    private String aluno;
-
-    private String disciplina;
+    private String tipo;
+ 
+    private Long monitoriaId;
+    
+    private Boolean respondida;
 }

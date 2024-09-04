@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { aceitarMonitoria, deletarMensagem, recusarMonitoria } from "../../api/api";
 import styles from "./mensagemResult.module.css";
+import MonitoriaResult from "../monitoriaResult/monitoriaResult";
+import { useNavigate } from "react-router-dom";
+import { waitAndRun } from "../../api/utils";
 
 
 export default function MensagemResult({ mensagem }) {
+    const navigate = useNavigate();
+
     const [ erroResposta, setErroResposta ] = useState("");
     const [ sucessoResposta, setSucessoResposta ] = useState("");
     const [ resolvido, setResolvido ] = useState(false);
@@ -15,6 +20,11 @@ export default function MensagemResult({ mensagem }) {
             setErroResposta("Falha ao aceitar a monitoria");
         } else {
             setSucessoResposta("Monitoria aceita com sucesso");
+            setResolvido(true);
+
+            mensagem.monitoria.status = "confirmada";
+            
+            waitAndRun(1500, () => navigate(0));
         }
         
     }
@@ -27,6 +37,10 @@ export default function MensagemResult({ mensagem }) {
         } else {
             setSucessoResposta("Monitoria recusada com sucesso");
             setResolvido(true);
+
+            mensagem.monitoria.status = "recusada";
+
+            waitAndRun(1500, () => navigate(0));
         }
     }
 
@@ -38,38 +52,40 @@ export default function MensagemResult({ mensagem }) {
         } else {
             setSucessoResposta("Mensagem excluída com sucesso");
             setResolvido(true);
+
+            waitAndRun(1500, () => navigate(0));
         }
     }
 
     return (
         <div className={`${styles.container}`}>
-            <div className={styles.col}>
-                <h4 className={styles.colTitulo}>{mensagem.data.toLocaleString()}</h4>
-                <p><span className={styles.bold}>Aluno:</span> {mensagem.monitoria.aluno.nome}</p>
-            </div>
-            <div className={styles.col}>
-                <h4 className={styles.colTitulo}>Local: {mensagem.monitoria.local}</h4>
-                <p><span className={styles.bold}>Disciplina:</span> {mensagem.monitoria.disciplina.nome}</p>
-            </div>
-            <div className={styles.col}>
-                <p><span className={styles.bold}>{mensagem.tipo}</span></p>
-                {!resolvido &&
-                    <>
-                    {mensagem.tipo === "Solicitação de Monitoria" ?
-                        <>
-                        <button onClick={aceitar}>Aceitar</button>
-                        <button onClick={recusar}>Recusar</button>
-                        </>
-                    :  
-                    <button onClick={deletar}>Deletar</button>
-                    }
-                    </>
-                }
-
+            <h3 className={styles.titulo}>{mensagem.tipo}</h3>
+            <MonitoriaResult monitoria={mensagem.monitoria} />
+            <div className={styles.containerBotoes}>
                 {resolvido &&
                     <>
                         <p className={styles.erro}>{erroResposta}</p>
                         <p className={styles.sucesso}>{sucessoResposta}</p>
+                    </>
+                }
+                {!resolvido &&
+                    <>
+                    {mensagem.tipo === "Solicitação de Monitoria" ?
+                        <>
+                        <button onClick={aceitar} 
+                            className={`${styles.respostaBotao} ${styles.aceitar}`}>
+                                Aceitar
+                        </button>
+
+                        <button 
+                            onClick={recusar}
+                            className={`${styles.respostaBotao} ${styles.recusar}`}>
+                                Recusar
+                        </button>
+                        </>
+                    :  
+                    <button onClick={deletar} className={`${styles.respostaBotao} ${styles.recusar}`}>Deletar</button>
+                    }
                     </>
                 }
             </div>

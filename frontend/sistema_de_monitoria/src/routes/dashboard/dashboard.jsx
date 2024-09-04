@@ -4,6 +4,7 @@ import { UserContext } from "../../contexts/userContext";
 import styles from "./dashboard.module.css";
 import NavButton from "../../components/navButton/navButton";
 import DividingLine from "../../components/dividingLine/dividingLine";
+import { deleteUserSession, loadUserSession } from "../../api/utils";
 
 
 export default function Dashboard() {
@@ -32,14 +33,20 @@ export default function Dashboard() {
     ];
 
     useEffect(() => {
-        if (!user) {
+        const loadedUser = loadUserSession();
+
+        if (!loadedUser) {
             navigate("/")
         }
+
+        setUser(loadedUser);
     }, [])
     
     const logout = () => {
+        const tipo = user.tipoUsuario;
         setUser(null);
-        navigate("/", {state: {selected: user.tipoUsuario}});
+        deleteUserSession();
+        navigate("/", {state: {selected: tipo}});
     };
 
     return (

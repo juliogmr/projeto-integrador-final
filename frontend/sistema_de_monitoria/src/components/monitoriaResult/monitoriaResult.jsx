@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styles from "./monitoriaResult.module.css";
 import { UserContext } from "../../contexts/userContext";
 import { monitoriaVencida } from "../../api/api";

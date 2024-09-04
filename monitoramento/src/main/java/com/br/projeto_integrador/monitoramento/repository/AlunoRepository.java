@@ -1,12 +1,13 @@
 package com.br.projeto_integrador.monitoramento.repository;
 
-import com.br.projeto_integrador.monitoramento.domain.Aluno;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
+import com.br.projeto_integrador.monitoramento.domain.Aluno;
 
 @Repository
 public interface AlunoRepository extends JpaRepository<Aluno, Long>, JpaSpecificationExecutor<Aluno> {

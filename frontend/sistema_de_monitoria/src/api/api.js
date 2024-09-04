@@ -85,6 +85,12 @@ export function filtrarMonitoriasVencidas(monitorias) {
         });
 }
 
+export function filtrarMonitoriasCanceladas(monitorias) {
+    return monitorias.filter((monitoria) => {
+        return monitoria.status !== "cancelada";
+    });
+}
+
 export async function buscarMensagens(user) {
     const url = `http://localhost:8080/${user.tipoUsuario}/${user.id}/mensagens`;
 
@@ -115,6 +121,25 @@ export async function buscarMensagens(user) {
     } catch (err) {
         console.log("Erro: " + err);
         return [];
+    }
+}
+
+export async function criarMonitoria(monitoria) {
+    const url = "http://localhost:8080/monitorias";
+
+    try {
+        const resp = await fetch(url, {
+            method: "POST",
+            body: JSON.stringify(monitoria),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        return resp.ok;
+    } catch(err) {
+        console.log("Erro: " + err);
+        return false;
     }
 }
 
@@ -156,7 +181,7 @@ export async function recusarMonitoria(monitoria) {
 
     try {
         const resp = await fetch(url, {
-            method: "PUT"
+            method: "PUT",
         });
         
         return resp.ok;

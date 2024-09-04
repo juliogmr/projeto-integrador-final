@@ -32,7 +32,7 @@ export default function Mensagens({ embedded = false }) {
                     <p>Você não tem novas mensagens</p>
                 : mensagens.map((mensagem) => {
                     return (
-                        <MensagemResult mensagem={mensagem}/>
+                        <MensagemResult mensagem={mensagem} key={mensagem.id}/>
                     )
                 })
                 }

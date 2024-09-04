@@ -13,11 +13,11 @@
 }
 
 .pendente {
-    background-color: #ddcea1;
+    background-color: var(--pendente-color);
 }
 
 .cancelada {
-    background-color: #eaa9a9;
+    background-color: var(--cancelada-color);
 }
 
 .col {
