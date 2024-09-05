@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    background-color: var(--primary-light-color);
+    border-radius: 20px;
+    border: 1px solid black;
+    padding: 5px 15px;
+}
+
+.rowTipo {
+    grid-row: 1;
+}
+
+.titulo {
+    font-weight: bold;
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.containerBotoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.respostaBotao {
+    grid-column: 3;
+
+    background-color: var(--primary-light-color);
+    border-radius: 15px;
+    border: 1px solid black;
+    font-weight: bold;
+    font-size: 0.8rem;
+
+    width: 70%;
+    max-width: 200px;
+}
+
+.aceitar:hover {
+    background-color: var(--aceitar-color);
+}
+
+.recusar:hover {
+    background-color: var(--recusar-color);
+}
+
+.erro {
+    color: red;
+}
+
+.sucesso {
+    color: green;
+}

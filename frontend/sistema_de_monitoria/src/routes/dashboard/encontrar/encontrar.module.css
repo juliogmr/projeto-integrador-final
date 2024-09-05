@@ -1,0 +1,44 @@
+.container {
+    width: 85%;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.secao {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-bottom: 10px;
+}
+
+.formContainer {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background-color: var(--primary-light-color);
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.inputContainer {
+    margin-left: 5px;
+    display: flex;
+    gap: 3px;
+    font-weight: bold;
+}
+
+.inputBox {
+    border-radius: 10px;
+    padding: 2px 5px;
+    height: 1.25rem;
+}
+
+.formButton {
+    margin-left: auto;
+    border-radius: 10px;
+    background-color: var(--primary-dark-color);
+}

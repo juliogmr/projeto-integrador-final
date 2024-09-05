@@ -1,10 +1,11 @@
 package com.br.projeto_integrador.monitoramento.repository;
 
-import com.br.projeto_integrador.monitoramento.domain.Instituicao;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.br.projeto_integrador.monitoramento.domain.Instituicao;
 
 @Repository
 public interface InstituicaoRepository extends JpaRepository<Instituicao, Long> {

@@ -1,30 +1,49 @@
 package com.br.projeto_integrador.monitoramento.controller;
 
-import com.br.projeto_integrador.monitoramento.controller.dto.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.br.projeto_integrador.monitoramento.controller.dto.AlunoDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.DisciplinaDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.LoginDTO;
+import com.br.projeto_integrador.monitoramento.controller.dto.MensagemDTOResponse;
+import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTOResponse;
 import com.br.projeto_integrador.monitoramento.controller.dto.alunos.DisciplinasResponse;
 import com.br.projeto_integrador.monitoramento.controller.dto.alunos.MonitorResponse;
 import com.br.projeto_integrador.monitoramento.controller.dto.alunos.MonitoriaMarcada;
 import com.br.projeto_integrador.monitoramento.domain.Aluno;
 import com.br.projeto_integrador.monitoramento.domain.Disciplina;
+import com.br.projeto_integrador.monitoramento.domain.Mensagem;
 import com.br.projeto_integrador.monitoramento.domain.Monitor;
 import com.br.projeto_integrador.monitoramento.domain.Monitoria;
 import com.br.projeto_integrador.monitoramento.repository.AlunoRepository;
 import com.br.projeto_integrador.monitoramento.repository.DisciplinaRepository;
+import com.br.projeto_integrador.monitoramento.repository.MensagemRepository;
 import com.br.projeto_integrador.monitoramento.repository.MonitorRepository;
 import com.br.projeto_integrador.monitoramento.repository.MonitoriaRepository;
 import com.br.projeto_integrador.monitoramento.util.ResourceNotFoundException;
+
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import javax.swing.text.html.Option;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/alunos")
 @RequiredArgsConstructor
@@ -37,18 +56,38 @@ public class AlunoController {
     private final MonitorRepository monitorRepository;
 
     private final DisciplinaRepository disciplinaRepository;
+    
+    private final MensagemRepository mensagemRepository;
 
 
     // Método para listar todos os alunos
     @GetMapping
-    public List<AlunoDTOResponse> getAllAlunos() {
-        List<Aluno> alunos = alunoRepository.findAll();
-        List<AlunoDTOResponse> list = new ArrayList<>();
-        for (Aluno aluno: alunos) {
-            AlunoDTOResponse alunoDTOResponse = getAlunoDTOResponse(aluno);
-            list.add(alunoDTOResponse);
-        }
-        return list;
+    public List<AlunoDTOResponse> getAllAlunos(@RequestParam(required = false) String nome, @RequestParam(required = false) String disciplina) {
+    	Specification<Aluno> spec = (root, query, cb) -> {
+    		List<Predicate> predicates = new ArrayList<>();
+    		
+    		if (nome != null) {
+    			predicates.add(cb.like(cb.lower(root.get("nome")), "%" + nome.toLowerCase() + "%"));
+    		}
+    		if (disciplina != null) {
+    			Join<Aluno, Disciplina> disciplinaJoin = root.join("disciplinas");
+    			predicates.add(cb.like(cb.lower(disciplinaJoin.get("nome")), "%" + disciplina.toLowerCase() + "%"));
+    		}
+    		
+    		return cb.and(predicates.toArray(new Predicate[0]));
+    	};
+    	
+    	List<Aluno> alunos = alunoRepository.findAll(spec);
+//        List<AlunoDTOResponse> list = new ArrayList<>();
+//        for (Aluno aluno: alunos) {
+//            AlunoDTOResponse alunoDTOResponse = AlunoDTOResponse.fromAluno(aluno);
+//            list.add(alunoDTOResponse);
+//        }
+        
+        List<AlunoDTOResponse> alunoDTOList = alunos.stream()
+        		.map((aluno) -> AlunoDTOResponse.fromAluno(aluno))
+        		.collect(Collectors.toList());
+        return alunoDTOList;
     }
 
     // Método para criar um novo aluno
@@ -64,7 +103,7 @@ public class AlunoController {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado com o ID: " + id));
 
-        AlunoDTOResponse alunoDTOResponse = getAlunoDTOResponse(aluno);
+        AlunoDTOResponse alunoDTOResponse = AlunoDTOResponse.fromAluno(aluno);
 
         return new ResponseEntity<>(alunoDTOResponse, HttpStatus.OK);
     }
@@ -95,24 +134,33 @@ public class AlunoController {
 
     // Método para listar todas as disciplinas de um aluno
     @GetMapping("/{id}/disciplinas")
-    public ResponseEntity<List<DisciplinaDTOResponseAluno>> getDisciplinasByAlunoId(@PathVariable Long id) {
+    public ResponseEntity<List<DisciplinaDTOResponse>> getDisciplinasByAlunoId(@PathVariable Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado com o ID: " + id));
 
-        var alunoDTO = getAlunoDTOResponse(aluno);
+        var alunoDTO = AlunoDTOResponse.fromAluno(aluno);
+       
+        List<DisciplinaDTOResponse> disciplinasDTOList = alunoDTO.getDisciplinas()
+        		.stream().map((disciplina) -> DisciplinaDTOResponse
+        		.fromDisciplina(disciplina)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(alunoDTO.getDisciplinas(), HttpStatus.OK);
+        return new ResponseEntity<>(disciplinasDTOList, HttpStatus.OK);
     }
 
     // Método para listar todas as monitorias de um aluno
     @GetMapping("/{id}/monitorias")
-    public ResponseEntity<List<MonitoriaResponseAluno>> getMonitoriasByAlunoId(@PathVariable Long id) {
+    public ResponseEntity<List<MonitoriaDTOResponse>> getMonitoriasByAlunoId(@PathVariable Long id) {
         Aluno aluno = alunoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado com o ID: " + id));
 
-        var alunoDTO = getAlunoDTOResponse(aluno);
+        List<Monitoria> monitorias = monitoriaRepository.findAllByAlunoId(aluno.getId())
+        		.orElse(new ArrayList<Monitoria>());
+        
+        List<MonitoriaDTOResponse> monitoriasDTOList = monitorias.stream()
+        		.map((monitoria) -> MonitoriaDTOResponse
+        		.fromMonitoria(monitoria)).collect(Collectors.toList());
 
-        return new ResponseEntity<>(alunoDTO.getMentoria(), HttpStatus.OK);
+        return new ResponseEntity<>(monitoriasDTOList, HttpStatus.OK);
     }
 
     // Método para agendar uma nova monitoria para um aluno
@@ -127,32 +175,33 @@ public class AlunoController {
 
     // metodos estaticos
 
-    private static AlunoDTOResponse getAlunoDTOResponse(Aluno aluno) {
-        AlunoDTOResponse alunoDTOResponse = new AlunoDTOResponse();
-        alunoDTOResponse.setNome(aluno.getNome());
-        alunoDTOResponse.setEmail(aluno.getEmail());
-        List<DisciplinaDTOResponseAluno> listaDisciplinas = new ArrayList<>();
-        for (Disciplina disciplina: aluno.getDisciplinas()
-        ) {
-            DisciplinaDTOResponseAluno disciplinaDTOResponseAluno = new DisciplinaDTOResponseAluno();
-            disciplinaDTOResponseAluno.setNome(disciplina.getNome());
-            listaDisciplinas.add(disciplinaDTOResponseAluno);
-        }
-        alunoDTOResponse.setDisciplinas(listaDisciplinas);
-        alunoDTOResponse.setEmail(alunoDTOResponse.getEmail());
-        List<MonitoriaResponseAluno> listaMonitoria = new ArrayList<>();
-        for(Monitoria monitoria : aluno.getMonitorias()){
-            MonitoriaResponseAluno monitoriaResponseAluno = new MonitoriaResponseAluno();
-            monitoriaResponseAluno.setData(monitoria.getData());
-            monitoriaResponseAluno.setLocal(monitoria.getLocal());
-            monitoriaResponseAluno.setMonitor(new MonitorResponseAluno());
-            monitoriaResponseAluno.getMonitor().setNome(monitoria.getMonitor().getNome());
-            listaMonitoria.add(monitoriaResponseAluno);
-        }
-        alunoDTOResponse.setMentoria(listaMonitoria);
-        alunoDTOResponse.setDisciplinas(listaDisciplinas);
-        return alunoDTOResponse;
-    }
+//    private static AlunoDTOResponse getAlunoDTOResponse(Aluno aluno) {
+//        AlunoDTOResponse alunoDTOResponse = new AlunoDTOResponse();
+//        alunoDTOResponse.setId(aluno.getId());
+//        alunoDTOResponse.setNome(aluno.getNome());
+//        alunoDTOResponse.setEmail(aluno.getEmail());
+//        List<DisciplinaDTOResponseAluno> listaDisciplinas = new ArrayList<>();
+//        for (Disciplina disciplina: aluno.getDisciplinas()
+//        ) {
+//            DisciplinaDTOResponseAluno disciplinaDTOResponseAluno = new DisciplinaDTOResponseAluno();
+//            disciplinaDTOResponseAluno.setNome(disciplina.getNome());
+//            listaDisciplinas.add(disciplinaDTOResponseAluno);
+//        }
+//        alunoDTOResponse.setDisciplinas(listaDisciplinas);
+//        alunoDTOResponse.setEmail(alunoDTOResponse.getEmail());
+//        List<MonitoriaResponseAluno> listaMonitoria = new ArrayList<>();
+//        for(Monitoria monitoria : aluno.getMonitorias()){
+//            MonitoriaResponseAluno monitoriaResponseAluno = new MonitoriaResponseAluno();
+//            monitoriaResponseAluno.setData(monitoria.getData());
+//            monitoriaResponseAluno.setLocal(monitoria.getLocal());
+//            monitoriaResponseAluno.setMonitor(new MonitorResponseAluno());
+//            monitoriaResponseAluno.getMonitor().setNome(monitoria.getMonitor().getNome());
+//            listaMonitoria.add(monitoriaResponseAluno);
+//        }
+//        alunoDTOResponse.setMentoria(listaMonitoria);
+//        alunoDTOResponse.setDisciplinas(listaDisciplinas);
+//        return alunoDTOResponse;
+//    }
 
     //endpoints uteis OS QUE VAMOS USAR ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -226,13 +275,25 @@ public class AlunoController {
     }
 
     // Método para "logar"
-    @GetMapping("/logar")
-    public ResponseEntity<Long> logar(@RequestBody LoginDTO loginDTO) {
-        var aluno = alunoRepository.findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
-        if(aluno == null){
-            throw new ResourceNotFoundException("Usuário não cadastrado no cinema");
-        } else {
-            return new ResponseEntity<>(aluno.get().getId(), HttpStatus.OK);
-        }
+    @PostMapping("/logar")
+    public ResponseEntity<AlunoDTOResponse> logar(@RequestBody LoginDTO loginDTO) {
+        var aluno = alunoRepository.findByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha())
+        		.orElseThrow(() -> new ResourceNotFoundException("Usuário ou senha incorretos"));
+        		
+
+        AlunoDTOResponse alunoResponse = AlunoDTOResponse.fromAluno(aluno);
+        
+        return new ResponseEntity<>(alunoResponse, HttpStatus.OK);
+    }
+    
+    @GetMapping("/{id}/mensagens")
+    public ResponseEntity<List<MensagemDTOResponse>> getMensagens(@PathVariable Long id) {
+    	List<Mensagem> mensagens = mensagemRepository.findAllByAlunoId(id);
+    	
+    	List<MensagemDTOResponse> mensagensDTOList = mensagens.stream()
+    			.map((mensagem) -> MensagemDTOResponse.fromMensagem(mensagem))
+    			.collect(Collectors.toList());
+    	
+    	return new ResponseEntity<>(mensagensDTOList, HttpStatus.OK);
     }
 }

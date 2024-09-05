@@ -1,11 +1,12 @@
 package com.br.projeto_integrador.monitoramento.repository;
 
 
-import com.br.projeto_integrador.monitoramento.domain.Disciplina;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import com.br.projeto_integrador.monitoramento.domain.Disciplina;
 
 @Repository
 public interface DisciplinaRepository extends JpaRepository<Disciplina, Long> {

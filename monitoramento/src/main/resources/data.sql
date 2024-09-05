@@ -44,38 +44,38 @@ INSERT INTO aluno_disciplina (aluno_id, disciplina_id) VALUES (6, 1); -- Ana Lim
 INSERT INTO aluno_disciplina (aluno_id, disciplina_id) VALUES (7, 2); -- Lucas Gomes cursa Física
 
 -- Populando a tabela Monitoria com 12 registros
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-01 14:00:00', 'Biblioteca Central', 1, 1, 1);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-01 14:00:00', 'Biblioteca Central', 'confirmada', 1, 1, 1);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-01 14:00:00', 'Laboratório de Informática', 2, 2, 3);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-01 14:00:00', 'Laboratório de Informática', 'confirmada', 2, 2, 3);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-02 09:00:00', 'Sala 101', 3, 3, 2);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-02 09:00:00', 'Sala 101', 'confirmada', 3, 3, 2);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-02 10:30:00', 'Sala 202', 4, 4, 1);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-02 10:30:00', 'Sala 202', 'confirmada', 4, 4, 1);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-03 08:00:00', 'Biblioteca Central', 5, 5, 3);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-03 08:00:00', 'Biblioteca Central', 'confirmada', 5, 5, 3);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-03 11:00:00', 'Sala 303', 6, 6, 1);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-03 11:00:00', 'Sala 303', 'confirmada', 6, 6, 1);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-04 15:00:00', 'Laboratório de Física', 7, 7, 2);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-04 15:00:00', 'Laboratório de Física', 'confirmada', 7, 7, 2);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-04 16:00:00', 'Biblioteca Central', 1, 4, 1);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-04 16:00:00', 'Biblioteca Central', 'confirmada', 1, 4, 1);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-05 09:30:00', 'Sala 404', 2, 5, 3);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-05 09:30:00', 'Sala 404', 'confirmada', 2, 5, 3);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-05 14:00:00', 'Sala 505', 3, 6, 2);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-05 14:00:00', 'Sala 505', 'confirmada', 3, 6, 2);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-06 08:30:00', 'Sala 606', 4, 7, 1);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-06 08:30:00', 'Sala 606', 'confirmada', 4, 7, 1);
 
-INSERT INTO monitoria (data, local, monitor_id, aluno_id, disciplina_id)
-VALUES ('2024-09-06 10:00:00', 'Biblioteca Central', 5, 1, 3);
+INSERT INTO monitoria (data, local, status, monitor_id, aluno_id, disciplina_id)
+VALUES ('2024-09-06 10:00:00', 'Biblioteca Central', 'confirmada', 5, 1, 3);
