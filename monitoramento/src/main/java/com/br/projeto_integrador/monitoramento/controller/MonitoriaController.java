@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.br.projeto_integrador.monitoramento.controller.dto.MensagemDTOResponse;
 import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTORequest;
 import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTOResponse;
 import com.br.projeto_integrador.monitoramento.domain.Aluno;
@@ -31,8 +30,6 @@ import com.br.projeto_integrador.monitoramento.repository.MonitorRepository;
 import com.br.projeto_integrador.monitoramento.repository.MonitoriaRepository;
 import com.br.projeto_integrador.monitoramento.util.ResourceNotFoundException;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin

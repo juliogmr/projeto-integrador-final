@@ -1,8 +1,5 @@
-import styles from "./dividingLine.module.css"
+import styles from "./dividingLine.module.css";
 
 export default function DividingLine() {
-
-    return (
-        <div className={styles.dividingLine}/>
-    )
+    return <div className={styles.dividingLine} />;
 }

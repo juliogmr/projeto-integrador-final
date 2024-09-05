@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { UserContext } from "../../../contexts/userContext";
 import Monitorias from "../monitorias/monitorias";
 import styles from "./summary.module.css";
@@ -9,14 +9,14 @@ export default function Summary() {
 
     return (
         <div className={styles.container}>
-            {user.tipoUsuario != "instituicoes" && 
-                <Monitorias 
-                    title="Próxima Monitoria" 
-                    limite={1} 
-                    embedded={true} 
+            {user.tipoUsuario != "instituicoes" && (
+                <Monitorias
+                    title="Próxima Monitoria"
+                    limite={1}
+                    embedded={true}
                     somenteNovas={true}
                 />
-            }
+            )}
             <Mensagens embedded={true} />
         </div>
     );

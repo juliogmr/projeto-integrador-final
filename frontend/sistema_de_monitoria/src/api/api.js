@@ -1,8 +1,8 @@
 export async function fazerLogin(tipoUsuario, email, senha) {
     const endpoints = {
-        "alunos": "http://localhost:8080/alunos/logar",
-        "monitores": "http://localhost:8080/monitores/logar",
-        "instituicoes": "http://localhost:8080/instituicoes/logar",
+        alunos: "http://localhost:8080/alunos/logar",
+        monitores: "http://localhost:8080/monitores/logar",
+        instituicoes: "http://localhost:8080/instituicoes/logar",
     };
 
     const url = endpoints[tipoUsuario];
@@ -13,7 +13,7 @@ export async function fazerLogin(tipoUsuario, email, senha) {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, senha}),
+            body: JSON.stringify({ email, senha }),
         });
 
         let data = await resp.json();
@@ -24,7 +24,7 @@ export async function fazerLogin(tipoUsuario, email, senha) {
 
         const user = { ...data, tipoUsuario: tipoUsuario };
         return user;
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return null;
     }
@@ -32,8 +32,8 @@ export async function fazerLogin(tipoUsuario, email, senha) {
 
 export async function buscarUsuarios(target, nome, disciplina) {
     const endpoints = {
-        "monitores": "http://localhost:8080/monitores",
-        "alunos": "http://localhost:8080/alunos",
+        monitores: "http://localhost:8080/monitores",
+        alunos: "http://localhost:8080/alunos",
     };
 
     let url = endpoints[target] + "?nome=" + nome + "&disciplina=" + disciplina;
@@ -43,8 +43,7 @@ export async function buscarUsuarios(target, nome, disciplina) {
         const resultados = await resp.json();
 
         return resultados;
-
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return [];
     }
@@ -61,7 +60,7 @@ export async function buscarMonitorias(user) {
             return {
                 ...resultado,
                 data: new Date(resultado.data),
-            }
+            };
         });
 
         monitorias.sort((a, b) => {
@@ -81,8 +80,8 @@ export function monitoriaVencida(monitoria) {
 
 export function filtrarMonitoriasVencidas(monitorias) {
     return monitorias.filter((monitoria) => {
-            return !monitoriaVencida(monitoria);
-        });
+        return !monitoriaVencida(monitoria);
+    });
 }
 
 export function filtrarMonitoriasCanceladas(monitorias) {
@@ -102,19 +101,29 @@ export async function buscarMensagens(user) {
             return {
                 ...resultado,
                 data: new Date(resultado.data),
-            }
+                monitoria: {
+                    ...resultado.monitoria,
+                    data: new Date(resultado.monitoria.data),
+                }
+            };
         });
 
         mensagens.sort((a, b) => {
             return a.data - b.data;
         });
 
-        if(user.tipoUsuario === "alunos") {
-            mensagens = mensagens.filter((mensagem) => mensagem.tipo !== "Solicitação de Monitoria");
+        if (user.tipoUsuario === "alunos") {
+            mensagens = mensagens.filter(
+                (mensagem) => mensagem.tipo !== "Solicitação de Monitoria"
+            );
         }
 
-        if(user.tipoUsuario === "monitores") {
-            mensagens = mensagens.filter((mensagem) => mensagem.tipo !== "Monitoria Aceita" && mensagem.tipo !== "Monitoria Recusada");
+        if (user.tipoUsuario === "monitores") {
+            mensagens = mensagens.filter(
+                (mensagem) =>
+                    mensagem.tipo !== "Monitoria Aceita" &&
+                    mensagem.tipo !== "Monitoria Recusada"
+            );
         }
 
         return mensagens;
@@ -137,7 +146,7 @@ export async function criarMonitoria(monitoria) {
         });
 
         return resp.ok;
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return false;
     }
@@ -155,7 +164,7 @@ export async function deletarMensagem(mensagem) {
         });
 
         return resp.ok;
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return false;
     }
@@ -166,11 +175,11 @@ export async function aceitarMonitoria(monitoria) {
 
     try {
         const resp = await fetch(url, {
-            method: "PUT"
+            method: "PUT",
         });
-        
+
         return resp.ok;
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return false;
     }
@@ -183,9 +192,9 @@ export async function recusarMonitoria(monitoria) {
         const resp = await fetch(url, {
             method: "PUT",
         });
-        
+
         return resp.ok;
-    } catch(err) {
+    } catch (err) {
         console.log("Erro: " + err);
         return false;
     }

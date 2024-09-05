@@ -1,6 +1,5 @@
 package com.br.projeto_integrador.monitoramento.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,13 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.projeto_integrador.monitoramento.controller.dto.MensagemDTORequest;
 import com.br.projeto_integrador.monitoramento.controller.dto.MensagemDTOResponse;
-import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTORequest;
-import com.br.projeto_integrador.monitoramento.controller.dto.MonitoriaDTOResponse;
-import com.br.projeto_integrador.monitoramento.domain.Aluno;
-import com.br.projeto_integrador.monitoramento.domain.Disciplina;
-import com.br.projeto_integrador.monitoramento.domain.Monitor;
-import com.br.projeto_integrador.monitoramento.domain.Monitoria;
 import com.br.projeto_integrador.monitoramento.domain.Mensagem;
+import com.br.projeto_integrador.monitoramento.domain.Monitoria;
 import com.br.projeto_integrador.monitoramento.repository.AlunoRepository;
 import com.br.projeto_integrador.monitoramento.repository.DisciplinaRepository;
 import com.br.projeto_integrador.monitoramento.repository.MensagemRepository;
@@ -32,8 +26,6 @@ import com.br.projeto_integrador.monitoramento.repository.MonitorRepository;
 import com.br.projeto_integrador.monitoramento.repository.MonitoriaRepository;
 import com.br.projeto_integrador.monitoramento.util.ResourceNotFoundException;
 
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.RequiredArgsConstructor;
 
 @CrossOrigin

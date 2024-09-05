@@ -1,8 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import styles from "./monitoriaResult.module.css";
 import { UserContext } from "../../contexts/userContext";
 import { monitoriaVencida } from "../../api/api";
-
 
 export default function MonitoriaResult({ monitoria }) {
     const { user } = useContext(UserContext);
@@ -17,25 +16,42 @@ export default function MonitoriaResult({ monitoria }) {
         parceiro = monitoria.monitor;
     }
 
+    console.log(monitoria.data);
+
     const vencida = monitoriaVencida(monitoria);
 
     return (
-        <div className={`${styles.container} ${vencida ? styles.vencida : "" } 
-            ${monitoria.status === "pendente" ? styles.pendente :
-              monitoria.status === "cancelada" ? styles.cancelada :
-              ""
-            }`
-        }>
+        <div
+            className={`${styles.container} ${vencida ? styles.vencida : ""} 
+            ${
+                monitoria.status === "pendente"
+                    ? styles.pendente
+                    : monitoria.status === "cancelada"
+                    ? styles.cancelada
+                    : ""
+            }`}
+        >
             <div className={styles.col}>
-                <h4 className={styles.colTitulo}>{monitoria.data.toLocaleString()}</h4>
-                <p><span className={styles.bold}>{tipoParceiro}:</span> {parceiro.nome}</p>
+                <h4 className={styles.colTitulo}>
+                    {monitoria.data.toLocaleString()}
+                </h4>
+                <p>
+                    <span className={styles.bold}>{tipoParceiro}:</span>{" "}
+                    {parceiro.nome}
+                </p>
             </div>
             <div className={styles.col}>
                 <h4 className={styles.colTitulo}>Local: {monitoria.local}</h4>
-                <p><span className={styles.bold}>Disciplina:</span> {monitoria.disciplina.nome}</p>
+                <p>
+                    <span className={styles.bold}>Disciplina:</span>{" "}
+                    {monitoria.disciplina.nome}
+                </p>
             </div>
             <div className={styles.col}>
-                <p><span className={styles.bold}>Status:</span> {monitoria.status}</p>
+                <p>
+                    <span className={styles.bold}>Status:</span>{" "}
+                    {monitoria.status}
+                </p>
             </div>
         </div>
     );

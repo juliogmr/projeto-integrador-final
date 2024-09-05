@@ -2,10 +2,7 @@ package com.br.projeto_integrador.monitoramento.controller.dto;
 
 import java.time.LocalDateTime;
 
-import com.br.projeto_integrador.monitoramento.domain.Aluno;
-import com.br.projeto_integrador.monitoramento.domain.Disciplina;
 import com.br.projeto_integrador.monitoramento.domain.Mensagem;
-import com.br.projeto_integrador.monitoramento.domain.Monitor;
 import com.br.projeto_integrador.monitoramento.domain.Monitoria;
 
 import lombok.Data;

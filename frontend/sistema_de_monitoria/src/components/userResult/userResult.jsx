@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import avatar from "../../assets/avatar.png";
 import star_empty from "../../assets/star_empty.png";
 import star_full from "../../assets/star_full.png";
@@ -7,11 +7,10 @@ import styles from "./userResult.module.css";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../contexts/userContext";
 
-export default function UserResult({ displayUser, esconderBotao=false }) {
+export default function UserResult({ displayUser, esconderBotao = false }) {
     const { user } = useContext(UserContext);
 
     const navigate = useNavigate();
-
 
     const avaliacaoEstrelas = [];
     for (let index = 0; index < displayUser.avaliacao; index++) {
@@ -23,15 +22,14 @@ export default function UserResult({ displayUser, esconderBotao=false }) {
     }
 
     let disciplinasList = displayUser.disciplinas.map((disciplina) => {
-        return disciplina.nome
+        return disciplina.nome;
     });
 
     const disciplinas = disciplinasList.join(", ");
 
     const solicitar = async () => {
-        navigate("/dashboard/solicitar", {state: { monitor: displayUser }})
-    }
-
+        navigate("/dashboard/solicitar", { state: { monitor: displayUser } });
+    };
 
     return (
         <div className={styles.container}>
@@ -40,7 +38,12 @@ export default function UserResult({ displayUser, esconderBotao=false }) {
                 <h4 className={styles.colTitulo}>Nome: {displayUser.nome}</h4>
                 <div className={styles.avaliacaoContainer}>
                     {avaliacaoEstrelas.map((estrela, index) => (
-                        <img key={index} className={styles.estrela} src={estrela} alt="Avaliação" />
+                        <img
+                            key={index}
+                            className={styles.estrela}
+                            src={estrela}
+                            alt="Avaliação"
+                        />
                     ))}
                 </div>
             </div>
@@ -48,9 +51,11 @@ export default function UserResult({ displayUser, esconderBotao=false }) {
                 <h4 className={styles.colTitulo}>Disciplinas:</h4>
                 <p>{disciplinas}</p>
             </div>
-            {user.tipoUsuario === "alunos" && !esconderBotao &&
-            <button onClick={solicitar} className={styles.solicitarButton}>Solicitar Monitoria</button>
-            }
+            {user.tipoUsuario === "alunos" && !esconderBotao && (
+                <button onClick={solicitar} className={styles.solicitarButton}>
+                    Solicitar Monitoria
+                </button>
+            )}
         </div>
     );
 }

@@ -2,8 +2,6 @@ package com.br.projeto_integrador.monitoramento.controller.dto;
 
 import java.time.LocalDateTime;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;

@@ -29,9 +29,9 @@ import com.br.projeto_integrador.monitoramento.controller.dto.alunos.MonitorResp
 import com.br.projeto_integrador.monitoramento.controller.dto.alunos.MonitoriaMarcada;
 import com.br.projeto_integrador.monitoramento.domain.Aluno;
 import com.br.projeto_integrador.monitoramento.domain.Disciplina;
+import com.br.projeto_integrador.monitoramento.domain.Mensagem;
 import com.br.projeto_integrador.monitoramento.domain.Monitor;
 import com.br.projeto_integrador.monitoramento.domain.Monitoria;
-import com.br.projeto_integrador.monitoramento.domain.Mensagem;
 import com.br.projeto_integrador.monitoramento.repository.AlunoRepository;
 import com.br.projeto_integrador.monitoramento.repository.DisciplinaRepository;
 import com.br.projeto_integrador.monitoramento.repository.MensagemRepository;
